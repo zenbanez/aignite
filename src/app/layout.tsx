@@ -19,6 +19,8 @@ export const metadata: Metadata = {
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/context/AuthContext";
+import { MasteryProvider } from "@/context/MasteryContext";
 
 export default function RootLayout({
   children,
@@ -28,9 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${notoSerif.variable} ${manrope.variable} antialiased bg-surface text-on-surface font-sans`}>
-        <Navbar />
-        <main className="pt-20">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <MasteryProvider>
+            <Navbar />
+            <main className="pt-20">{children}</main>
+            <Footer />
+          </MasteryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

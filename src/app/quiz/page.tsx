@@ -1,7 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useMastery } from '@/context/MasteryContext';
+import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
 
 const questions = [
   {
@@ -139,6 +142,8 @@ const questions = [
 ];
 
 export default function QuizPage() {
+  const { updateQuizScore } = useMastery();
+  const { user } = useAuth();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
@@ -148,6 +153,12 @@ export default function QuizPage() {
   };
 
   const score = questions.filter(q => answers[q.id] === q.answer).length;
+
+  useEffect(() => {
+    if (showResults && user) {
+      updateQuizScore(score);
+    }
+  }, [showResults, user, score, updateQuizScore]);
 
   return (
     <div className="bg-[#f9f9f8] min-h-screen text-[#1a1c1c] p-6 pt-32 pb-20 flex flex-col items-center">
@@ -205,10 +216,25 @@ export default function QuizPage() {
             </div>
         </div>
       ) : (
-        <div className="text-center bg-white p-16 rounded-[24px] shadow-sm">
-            <h1 className="text-4xl font-bold text-[#00464a] mb-4">Quiz Complete!</h1>
-            <p className="text-2xl mb-8">You scored {score} out of {questions.length}</p>
-            <button onClick={() => window.location.reload()} className="bg-[#00464a] text-white px-10 py-3 rounded-[12px]">Retry Quiz</button>
+        <div className="text-center bg-white p-16 rounded-[24px] shadow-sm max-w-xl">
+            <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <span className="material-symbols-outlined text-4xl text-primary">emoji_events</span>
+            </div>
+            <h1 className="text-4xl font-bold text-[#00464a] mb-4 font-headline">Quiz Complete!</h1>
+            <p className="text-2xl mb-4 font-body">You scored {score} out of {questions.length}</p>
+            <p className="text-on-surface-variant text-sm mb-10 font-body">
+                {score === questions.length 
+                  ? "Perfect! You've mastered the ethical foundations of AIgnite." 
+                  : "Great effort. You can retry anytime to reach for a perfect score."}
+            </p>
+            <div className="flex flex-col gap-4">
+                <Link href="/atelier" className="bg-[#00464a] text-white px-10 py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-lg">
+                    Return to Atelier
+                </Link>
+                <button onClick={() => window.location.reload()} className="text-primary font-bold text-sm uppercase tracking-widest p-4">
+                    Retry Quiz
+                </button>
+            </div>
         </div>
       )}
     </div>

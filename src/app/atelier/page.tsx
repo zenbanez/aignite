@@ -1,11 +1,23 @@
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
+import PromptLab from "@/components/PromptLab";
+import MasteryDashboard from "@/components/MasteryDashboard";
+import Toolbox from "@/components/Toolbox";
+import { useAuth } from '@/context/AuthContext';
 
 export default function AtelierPage() {
+  const { user } = useAuth();
+
   return (
     <main className="pt-24 pb-16 px-6 max-w-6xl mx-auto min-h-screen flex flex-col items-center bg-surface">
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20 items-center w-full">
+      {user && (
+        <section className="w-full mb-12">
+          <MasteryDashboard />
+        </section>
+      )}
+
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12 items-center w-full">
         <div className="md:col-span-7 space-y-6">
           <h1 className="text-5xl md:text-6xl font-headline font-black text-primary leading-tight">
             Welcome to your <br/><span className="italic text-secondary">Digital Atelier.</span>
@@ -34,6 +46,17 @@ export default function AtelierPage() {
           </div>
         </div>
       </section>
+
+      {/* Prompt Lab Section */}
+      <section className="w-full mb-12">
+        <PromptLab />
+      </section>
+
+      {user && (
+        <section className="w-full mb-12">
+          <Toolbox />
+        </section>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         <div className="md:col-span-2 bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm flex flex-col md:flex-row gap-8 items-center border border-stone-100">

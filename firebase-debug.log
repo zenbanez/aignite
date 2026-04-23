@@ -1,0 +1,23 @@
+[debug] [2026-04-23T02:52:33.619Z] ----------------------------------------------------------------------
+[debug] [2026-04-23T02:52:33.621Z] Command:       /usr/local/bin/node /home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/.bin/firebase deploy --token  --non-interactive --debug
+[debug] [2026-04-23T02:52:33.621Z] CLI Version:   13.15.0
+[debug] [2026-04-23T02:52:33.621Z] Platform:      linux
+[debug] [2026-04-23T02:52:33.622Z] Node Version:  v24.14.0
+[debug] [2026-04-23T02:52:33.622Z] Time:          Thu Apr 23 2026 02:52:33 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-04-23T02:52:33.622Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-23T02:52:33.636Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-04-23T02:52:33.709Z] Object "" in "firebase.json" has unknown property: {"additionalProperty":"apphosting"}
+[debug] [2026-04-23T02:52:33.718Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-23T02:52:33.792Z] Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+    at GoogleAuth.getApplicationDefaultAsync (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/google-auth-library/build/src/auth/googleauth.js:287:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async GoogleAuth._GoogleAuth_determineClient (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/google-auth-library/build/src/auth/googleauth.js:834:32)
+    at async GoogleAuth.getClient (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/google-auth-library/build/src/auth/googleauth.js:698:20)
+    at async GoogleAuth.getAccessToken (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/google-auth-library/build/src/auth/googleauth.js:722:24)
+    at async autoAuth (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/firebase-tools/lib/requireAuth.js:24:19)
+    at async requireAuth (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/firebase-tools/lib/requireAuth.js:65:20)
+    at async requirePermissions (/home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/firebase-tools/lib/requirePermissions.js:17:5)
+    at async /home/node/.openclaw/workspace/projects/project_aignite/educator-hub/temp-firebase/node_modules/firebase-tools/lib/command.js:226:17
+[error] 
+[error] Error: Failed to authenticate, have you run firebase login?

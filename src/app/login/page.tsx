@@ -1,7 +1,25 @@
+"use client";
+
 import React from 'react';
 import Link from "next/link";
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const { signInWithGoogle, user } = useAuth();
+  const router = useRouter();
+
+  // If user is already logged in, send them to the atelier
+  React.useEffect(() => {
+    if (user) {
+      router.push('/atelier');
+    }
+  }, [user, router]);
+
+  const handleLogin = async () => {
+    await signInWithGoogle();
+  };
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-surface overflow-x-hidden">
       <div className="w-full max-w-[1440px] min-h-screen grid grid-cols-1 md:grid-cols-12">
@@ -40,9 +58,12 @@ export default function LoginPage() {
               <p className="font-body text-on-surface-variant">Step back into your digital atelier.</p>
             </div>
             <div className="flex flex-col gap-6">
-              <Link href="/" className="w-full py-4 bg-primary text-on-primary font-body font-bold rounded-xl flex items-center justify-center gap-3 hover:bg-primary-container transition-colors text-center inline-block uppercase tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+              <button 
+                onClick={handleLogin}
+                className="w-full py-4 bg-primary text-on-primary font-body font-bold rounded-xl flex items-center justify-center gap-3 hover:bg-primary-container uppercase tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+              >
                 Continue with Google
-              </Link>
+              </button>
             </div>
             <div className="mt-12 text-center">
               <p className="font-body text-sm text-on-surface-variant">

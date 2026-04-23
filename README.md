@@ -4,11 +4,13 @@ This is the central technical platform for **Project AIgnite**, designed to prov
 
 ## Current State
 
-The project is currently in a testing phase with infrastructure integrated with **Firebase**:
+The project is now a functional **Digital Atelier**:
 
-*   **Authentication:** Firebase Auth enabled for user management.
-*   **Database:** Firestore configured for data storage.
+*   **Authentication:** Firebase Auth is live. Users can log in with Google to access the Prompt Lab.
+*   **Prompt Lab:** A scholarly tool for educators to transform lesson objectives into ethical, DepEd-compliant prompts (Assistive, Administrative, Creative).
+*   **Database:** Firestore integration ready for "My Library" curation (persisting saved prompts).
 *   **Storage:** Firebase Storage active for media and document hosting.
+*   **Curated News:** Automated daily news briefing section on the homepage.
 
 ## Getting Started
 
