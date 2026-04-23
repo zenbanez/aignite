@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project AIgnite: Educators Hub
+
+This is the central technical platform for **Project AIgnite**, designed to provide AI literacy resources, prompt banks, and support for Filipino educators.
+
+## Current State
+
+The project is currently in a testing phase with infrastructure integrated with **Firebase**:
+
+*   **Authentication:** Firebase Auth enabled for user management.
+*   **Database:** Firestore configured for data storage.
+*   **Storage:** Firebase Storage active for media and document hosting.
 
 ## Getting Started
 
@@ -15,10 +25,6 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 

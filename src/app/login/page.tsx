@@ -40,31 +40,8 @@ export default function LoginPage() {
               <p className="font-body text-on-surface-variant">Step back into your digital atelier.</p>
             </div>
             <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <label className="font-body text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1" htmlFor="email">Email Address</label>
-                <div className="relative">
-                  <input className="w-full bg-surface-container-highest border-none rounded-sm p-4 text-on-surface focus:ring-2 focus:ring-primary/40 transition-all duration-200 outline-none" id="email" placeholder="educator@atelier.edu" type="email"/>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between items-center ml-1">
-                  <label className="font-body text-xs font-bold uppercase tracking-widest text-on-surface-variant" htmlFor="password">Password</label>
-                  <Link className="font-body text-xs font-semibold text-primary hover:text-primary-container transition-colors" href="/forgot-password">Forgot Password?</Link>
-                </div>
-                <div className="relative">
-                  <input className="w-full bg-surface-container-highest border-none rounded-sm p-4 text-on-surface focus:ring-2 focus:ring-primary/40 transition-all duration-200 outline-none" id="password" placeholder="••••••••" type="password"/>
-                </div>
-              </div>
-              <Link href="/" className="bg-gradient-to-br from-[#00464a] to-[#006064] mt-4 py-4 rounded-xl text-white font-bold font-body uppercase tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-center inline-block" type="button">
-                Enter Workspace
-              </Link>
-              <div className="my-6 flex items-center gap-4">
-                <div className="flex-1 h-[1px] bg-outline-variant/20"></div>
-                <span className="font-body text-xs font-medium text-outline uppercase tracking-widest">or</span>
-                <div className="flex-1 h-[1px] bg-outline-variant/20"></div>
-              </div>
-              <Link href="/" className="w-full py-3 bg-surface-container-low text-on-surface font-body font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-surface-container-high transition-colors text-center inline-block">
-                Continue with Institution Account
+              <Link href="/" className="w-full py-4 bg-primary text-on-primary font-body font-bold rounded-xl flex items-center justify-center gap-3 hover:bg-primary-container transition-colors text-center inline-block uppercase tracking-widest shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+                Continue with Google
               </Link>
             </div>
             <div className="mt-12 text-center">

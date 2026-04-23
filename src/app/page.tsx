@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import CuratedNews from "@/components/CuratedNews";
 
 export default function Home() {
   return (
@@ -32,6 +33,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Blog/News Section */}
+      <CuratedNews />
 
       {/* Featured Guides */}
       <section className="py-24 px-6 lg:px-12 bg-surface-container-low">

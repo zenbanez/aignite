@@ -84,7 +84,9 @@ export default function ResourcesPage() {
               {/* Small Banner Photo / Color Block */}
               <div className={`h-32 w-full ${res.bannerClass} relative flex items-center justify-center overflow-hidden`}>
                  <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
-                 {/* This div acts as the image placeholder. You can swap this block with <Image src="..." /> later */}
+                 {res.id === 1 && <Image src="/old and new.png" alt="Official Documents" fill className="object-cover" />}
+                 {res.id === 2 && <Image src="/pen table.png" alt="Prompt Interface" fill className="object-cover" />}
+                 {res.id === 5 && <Image src="/serene desk.png" alt="Assessment Strategy" fill className="object-cover" />}
               </div>
               
               <div className="p-8 flex flex-col flex-grow">

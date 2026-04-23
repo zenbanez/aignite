@@ -1,0 +1,20 @@
+{
+  "curation": [
+    {
+      "id": 1,
+      "date": "2026-04-23",
+      "category": "Policy",
+      "title": "DepEd Order 003 s. 2026: The Human-Centered Shift",
+      "excerpt": "New guidelines emphasize that AI should support, not replace, Filipino educators in the classroom.",
+      "link": "/news/deped-order-003"
+    },
+    {
+      "id": 2,
+      "date": "2026-04-22",
+      "category": "Training",
+      "title": "Project AGAP.AI Rolls Out Nationwide",
+      "excerpt": "Targeting 300,000 teachers, this initiative marks a massive leap in local AI literacy efforts.",
+      "link": "/news/agap-ai-launch"
+    }
+  ]
+}
