@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Link from "next/link";
 import Image from "next/image";
@@ -5,9 +7,11 @@ import PromptLab from "@/components/PromptLab";
 import MasteryDashboard from "@/components/MasteryDashboard";
 import Toolbox from "@/components/Toolbox";
 import { useAuth } from '@/context/AuthContext';
+import { useMastery } from '@/context/MasteryContext';
 
 export default function AtelierPage() {
   const { user } = useAuth();
+  const { mastery } = useMastery();
 
   return (
     <main className="pt-24 pb-16 px-6 max-w-6xl mx-auto min-h-screen flex flex-col items-center bg-surface">
@@ -25,14 +29,13 @@ export default function AtelierPage() {
           <p className="text-xl text-on-surface-variant font-light max-w-xl leading-relaxed font-body">
             AIgnite isn't just a tool; it's a sanctuary for your professional growth. Let's configure your workspace to support your unique teaching style.
           </p>
-          <div className="flex items-center gap-4 pt-4">
-            <Link href="/" className="bg-gradient-to-r from-primary to-primary-container text-white px-8 py-4 rounded-xl font-bold tracking-wider text-sm font-label hover:shadow-lg transition-all active:scale-95 text-center inline-block">
-              CONTINUE JOURNEY
-            </Link>
-            <button className="text-primary font-bold text-sm tracking-widest px-6 py-4 hover:bg-surface-container-low rounded-xl transition-colors font-label">
-              SKIP FOR NOW
-            </button>
-          </div>
+          {!user && (
+            <div className="flex items-center gap-4 pt-4">
+              <Link href="/login" className="bg-gradient-to-r from-primary to-primary-container text-white px-8 py-4 rounded-xl font-bold tracking-wider text-sm font-label hover:shadow-lg transition-all active:scale-95 text-center inline-block">
+                CONTINUE JOURNEY
+              </Link>
+            </div>
+          )}
         </div>
         <div className="md:col-span-5 relative">
           <div className="rounded-3xl overflow-hidden shadow-xl transform rotate-2 relative w-full h-[450px]">
@@ -61,13 +64,42 @@ export default function AtelierPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
         <div className="md:col-span-2 bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm flex flex-col md:flex-row gap-8 items-center border border-stone-100">
           <div className="flex-1 space-y-4">
-            <h3 className="text-2xl font-bold text-primary font-headline">Define Your Voice</h3>
-            <p className="text-on-surface-variant leading-relaxed font-body">AIgnite learns how you speak. Upload a sample of your writing or select a persona style so your AI-generated materials feel authentically yours.</p>
-            <button className="mt-4 bg-surface-container-low text-primary px-6 py-3 rounded-lg font-bold text-xs tracking-widest border border-outline-variant/20 hover:bg-surface-container-high transition-colors font-label">
-              SET VOICE PROFILE
-            </button>
+            <h3 className="text-2xl font-bold text-primary font-headline">
+              {user ? 'Take the Mastery Quiz' : 'Define Your Voice'}
+            </h3>
+            <p className="text-on-surface-variant leading-relaxed font-body">
+              {user 
+                ? 'Prove your prowess and boost your rank. Our quiz tests your understanding of ethical AI implementation and prompt engineering.' 
+                : "AIgnite learns how you speak. Upload a sample of your writing or select a persona style so your AI-generated materials feel authentically yours."
+              }
+            </p>
+            {user ? (
+              <Link href="/quiz" className="mt-4 bg-secondary-fixed text-on-secondary-fixed px-6 py-3 rounded-lg font-bold text-xs tracking-widest hover:shadow-md transition-all font-label inline-block">
+                START QUIZ
+              </Link>
+            ) : (
+              <button className="mt-4 bg-surface-container-low text-primary px-6 py-3 rounded-lg font-bold text-xs tracking-widest border border-outline-variant/20 hover:bg-surface-container-high transition-colors font-label">
+                SET VOICE PROFILE
+              </button>
+            )}
           </div>
-          <div className="w-full md:w-64 aspect-square bg-surface-container rounded-2xl"></div>
+          <div className="w-full md:w-64 aspect-square bg-surface-container rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
+            {user && (
+              <>
+                <div className="text-6xl font-black text-primary/10 absolute inset-0 flex items-center justify-center select-none">
+                  QUIZ
+                </div>
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="text-4xl font-black text-secondary">
+                    {mastery?.quizScore || 0}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary opacity-40 mt-1">
+                    Current Score
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm border border-stone-100 flex flex-col justify-between">

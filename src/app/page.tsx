@@ -37,28 +37,44 @@ export default function Home() {
       {/* Blog/News Section */}
       <CuratedNews />
 
-      {/* Featured Guides */}
+      {/* Featured Offerings Section */}
       <section className="py-24 px-6 lg:px-12 bg-surface-container-low">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">Featured Guides</h2>
-            <p className="text-on-surface-variant">Curated insights for the modern scholarly practice.</p>
+            <h2 className="text-4xl font-bold text-primary mb-4">Elevate Your Practice</h2>
+            <p className="text-on-surface-variant">The definitive resources for DO 003 s. 2026 compliance.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div className="md:col-span-4 lg:col-span-4 bg-surface-container-lowest rounded-xl p-8 shadow-sm hover:translate-y-[-4px] transition-transform duration-300">
-              <span className="text-tertiary font-bold text-xs uppercase tracking-widest mb-4 block">Core Framework</span>
-              <h3 className="text-3xl font-bold text-primary mb-6 leading-snug">AI Literacy for the Humanist Educator</h3>
-              <div className="w-full h-64 bg-slate-200 rounded-xl mb-6"></div>
-              <p className="text-on-surface-variant mb-6">Balance automated efficiency with personal pedagogy in this comprehensive masterclass.</p>
-              <Link className="text-primary font-bold flex items-center gap-2" href="/resources">
-                Learn More
-              </Link>
-            </div>
-            <div className="md:col-span-2 lg:col-span-2 bg-primary text-white rounded-xl p-8 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* The Ebook Card */}
+            <div className="bg-surface-container-lowest rounded-[2rem] p-10 shadow-sm hover:translate-y-[-4px] transition-transform duration-300 border border-outline-variant/10 flex flex-col justify-between">
               <div>
-                <h3 className="text-2xl font-bold mb-4">Prompt Engineering for History</h3>
-                <p className="opacity-80 text-sm">Design interactive simulations for the classroom.</p>
+                <span className="text-secondary font-bold text-xs uppercase tracking-widest mb-4 block">The Guide</span>
+                <h3 className="text-3xl font-bold text-primary mb-4 leading-snug font-headline">AI in the Classroom, Done Right</h3>
+                <p className="text-on-surface-variant mb-8 font-body">Master the practical, ethical, and legal frameworks of AI in Philippine education. Includes 30+ teacher-vetted prompts.</p>
               </div>
+              <div className="flex items-center justify-between mt-auto">
+                <span className="text-2xl font-black text-primary">₱499</span>
+                <Link className="bg-primary text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg shadow-primary/10" href="/launch">
+                  Get the Ebook
+                </Link>
+              </div>
+            </div>
+
+            {/* The Mastery Workshop Card */}
+            <div className="bg-primary text-white rounded-[2rem] p-10 shadow-xl flex flex-col justify-between relative overflow-hidden group">
+              <div className="z-10">
+                <span className="text-secondary-fixed font-bold text-xs uppercase tracking-widest mb-4 block">Institutional Training</span>
+                <h3 className="text-3xl font-bold mb-4 leading-snug font-headline">3-Day AI Mastery Workshop</h3>
+                <p className="opacity-80 mb-8 font-body">Bring Project AIgnite to your school. A deep-dive simulation for departments to master administrative and creative AI workflows.</p>
+              </div>
+              <div className="z-10 flex items-center justify-between mt-auto">
+                <span className="text-lg font-medium opacity-60">F2F / Hybrid</span>
+                <Link className="bg-white text-primary px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-secondary-container transition-colors" href="/contact">
+                  Request Proposal
+                </Link>
+              </div>
+              {/* Abstract decoration */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32 transition-transform group-hover:scale-110"></div>
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import { useMastery } from '@/context/MasteryContext';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
@@ -162,10 +161,6 @@ export default function QuizPage() {
 
   return (
     <div className="bg-[#f9f9f8] min-h-screen text-[#1a1c1c] p-6 pt-32 pb-20 flex flex-col items-center">
-      <Head>
-        <title>AI Mastery Quiz</title>
-      </Head>
-      
       {!showResults ? (
         <div className="w-full max-w-5xl space-y-12">
             <div className="mb-12">

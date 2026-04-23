@@ -2,16 +2,21 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useMastery } from '@/context/MasteryContext';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import Link from 'next/link';
 
 type TransformationType = 'assistive' | 'administrative' | 'creative';
 
 export default function PromptLab() {
   const { user } = useAuth();
+  const { refreshLibraryCount } = useMastery();
   const [objective, setObjective] = useState('');
   const [type, setType] = useState<TransformationType>('assistive');
   const [result, setResult] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!user) {
     return (
@@ -47,6 +52,27 @@ export default function PromptLab() {
       setResult(prompt);
       setIsGenerating(false);
     }, 1000);
+  };
+
+  const handleSave = async () => {
+    if (!user || !result || isSaving) return;
+    setIsSaving(true);
+    try {
+      await addDoc(collection(db, 'prompts'), {
+        userId: user.uid,
+        objective,
+        type,
+        prompt: result,
+        createdAt: serverTimestamp()
+      });
+      await refreshLibraryCount();
+      alert("Prompt saved to your library!");
+    } catch (error) {
+      console.error("Error saving prompt:", error);
+      alert("Failed to save prompt.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -114,8 +140,12 @@ export default function PromptLab() {
                 <div className="bg-white p-6 rounded-xl border border-primary/5 text-on-surface leading-relaxed font-body italic shadow-inner whitespace-pre-wrap">
                   {result}
                 </div>
-                <button className="w-full border-2 border-primary text-primary py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
-                  Save to My Library
+                <button 
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="w-full border-2 border-primary text-primary py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all disabled:opacity-50"
+                >
+                  {isSaving ? 'Saving...' : 'Save to My Library'}
                 </button>
               </div>
             ) : (
