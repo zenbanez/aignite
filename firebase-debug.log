@@ -1,0 +1,26 @@
+[debug] [2026-04-30T13:57:49.168Z] ----------------------------------------------------------------------
+[debug] [2026-04-30T13:57:49.171Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\zenba\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-04-30T13:57:49.171Z] CLI Version:   15.15.0
+[debug] [2026-04-30T13:57:49.171Z] Platform:      win32
+[debug] [2026-04-30T13:57:49.171Z] Node Version:  v22.21.0
+[debug] [2026-04-30T13:57:49.172Z] Time:          Thu Apr 30 2026 21:57:49 GMT+0800 (Philippine Standard Time)
+[debug] [2026-04-30T13:57:49.172Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-30T13:57:51.078Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-30T13:57:51.079Z] > authorizing via signed-in user (zenbanez@gmail.com)
+[debug] [2026-04-30T13:57:51.079Z] [iam] checking project neon-camp-341511 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebase.projects.update","firebaseauth.configs.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]
+[debug] [2026-04-30T13:57:51.080Z] Checked if tokens are valid: true, expires at: 1777559627169
+[debug] [2026-04-30T13:57:51.080Z] Checked if tokens are valid: true, expires at: 1777559627169
+[debug] [2026-04-30T13:57:51.081Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/neon-camp-341511:testIamPermissions [none]
+[debug] [2026-04-30T13:57:51.081Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/neon-camp-341511:testIamPermissions  x-goog-user-project=neon-camp-341511
+[debug] [2026-04-30T13:57:51.081Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neon-camp-341511:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebase.projects.update","firebaseauth.configs.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[debug] [2026-04-30T13:57:52.061Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/neon-camp-341511:testIamPermissions 200
+[debug] [2026-04-30T13:57:52.062Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/neon-camp-341511:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebase.projects.update","firebaseauth.configs.update","firebaserules.releases.create","firebaserules.releases.update","firebaserules.rulesets.create"]}
+[info] 
+[info] === Deploying to 'neon-camp-341511'...
+[info] 
+[info] i  deploying storage, firestore, apphosting, auth 
+[info] i  storage: ensuring required API firebasestorage.googleapis.com is enabled... 
+[debug] [2026-04-30T13:57:52.065Z] Checked if tokens are valid: true, expires at: 1777559627169
+[debug] [2026-04-30T13:57:52.065Z] Checked if tokens are valid: true, expires at: 1777559627169
+[debug] [2026-04-30T13:57:52.065Z] >>> [apiv2][query] GET https://firebasestorage.googleapis.com/v1alpha/projects/neon-camp-341511/defaultBucket [none]

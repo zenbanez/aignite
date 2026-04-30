@@ -1,9 +1,12 @@
-import { initializeApp, cert } from 'firebase-admin/app';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
-import * as serviceAccount from '../../service-account.json';
 
-const app = initializeApp({
-  credential: cert(serviceAccount as any)
-});
+const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT;
 
-export const dbAdmin = getFirestore(app);
+const app = getApps().length === 0 
+  ? initializeApp({
+      credential: cert(serviceAccountKey ? JSON.parse(serviceAccountKey) : {})
+    })
+  : getApps()[0];
+
+export const dbAdmin = getFirestore(app, 'aignite');
