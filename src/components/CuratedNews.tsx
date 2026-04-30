@@ -1,3 +1,4 @@
+// src/components/CuratedNews.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,7 +19,11 @@ export default function CuratedNews() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Only attempt fetch in the browser to avoid SSR/Build invalid-api-key errors
+    if (typeof window === "undefined") return;
+
     const fetchNews = async () => {
+// ...
       try {
         const q = query(collection(db, "news"), orderBy("date", "desc"), limit(3));
         const querySnapshot = await getDocs(q);
