@@ -1,8 +1,40 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import newsData from "@/data/news.json";
+import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+interface NewsItem {
+  id: string;
+  title: string;
+  category: string;
+  date: string;
+  excerpt: string;
+}
 
 export default function CuratedNews() {
-  const newsItems = newsData.curation;
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const q = query(collection(db, "news"), orderBy("date", "desc"), limit(3));
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as NewsItem[];
+        setNewsItems(data);
+      } catch (error) {
+        console.error("Error fetching curated news:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNews();
+  }, []);
   return (
     <section className="py-24 px-6 lg:px-12 bg-surface">
       <div className="max-w-7xl mx-auto">

@@ -2,15 +2,19 @@
 
 This is the central technical platform for **Project AIgnite**, designed to provide AI literacy resources, prompt banks, and support for Filipino educators.
 
-## Current State
+## Current State (v1.2 - 2026-04-30)
 
-The project is now a functional **Digital Atelier**:
+The project is now a functional **Digital Atelier** and **Administrative Hub**:
 
-*   **Authentication:** Firebase Auth is live. Users can log in with Google to access the Prompt Lab.
+*   **Authentication & Roles:** Firebase Auth is live with **Custom Claims** for Admin roles.
+*   **Educators Hub:** Located at `projects/project_aignite/educator-hub`.
+*   **Curated Intelligence:** News briefings migrated from static JSON to the `aignite` Firestore database instance.
+*   **Admin Dashboard:** Secure `/admin` route live for Zen, featuring:
+    *   **News Management:** CRUD operations for the news stream.
+    *   **User Management:** Real-time searchable list of all registered teachers.
+*   **Backend Infrastructure:** Firebase Admin SDK integrated with secure `service-account.json` (git-ignored) for elevated operations.
 *   **Prompt Lab:** A scholarly tool for educators to transform lesson objectives into ethical, DepEd-compliant prompts (Assistive, Administrative, Creative).
-*   **Database:** Firestore integration ready for "My Library" curation (persisting saved prompts).
-*   **Storage:** Firebase Storage active for media and document hosting.
-*   **Curated News:** Automated daily news briefing section on the homepage.
+*   **Mastery System:** Persistent level and rank system for users.
 
 ## Getting Started
 

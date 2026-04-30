@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user, logOut } = useAuth(); // Assume AuthContext provides user object
+  // For now, checking email as a quick mock for admin, replace with proper isAdmin check when ready
+  const isAdmin = user?.email === "zenbanez@gmail.com"; 
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-[24px] border-b border-outline-variant/10">
@@ -14,6 +16,10 @@ const Navbar = () => {
         <div className="flex gap-8 items-center font-label text-sm tracking-widest uppercase font-bold">
           <Link href="/atelier" className="hover:text-secondary transition-colors">Atelier</Link>
           <Link href="/resources" className="hover:text-secondary transition-colors">Resources</Link>
+          
+          {isAdmin && (
+            <Link href="/admin" className="hover:text-primary transition-colors text-red-600">Admin</Link>
+          )}
           
           {user ? (
             <div className="flex items-center gap-6">

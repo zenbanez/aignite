@@ -53,7 +53,7 @@ export default function Home() {
                 <p className="text-on-surface-variant mb-8 font-body">Master the practical, ethical, and legal frameworks of AI in Philippine education. Includes 30+ teacher-vetted prompts.</p>
               </div>
               <div className="flex items-center justify-between mt-auto">
-                <span className="text-2xl font-black text-primary">₱499</span>
+                <span className="text-2xl font-black text-primary">Limited Discount</span>
                 <Link className="bg-primary text-white px-8 py-3 rounded-xl font-bold uppercase tracking-widest text-xs shadow-lg shadow-primary/10" href="/launch">
                   Get the Ebook
                 </Link>
