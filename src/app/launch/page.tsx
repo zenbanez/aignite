@@ -30,7 +30,7 @@ export default function LaunchPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/checkout" className="bg-primary text-white px-8 py-4 rounded-md font-bold tracking-wide uppercase text-sm shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
-                  Get the Ebook Now
+                  Order Now
                 </Link>
               </div>
             </div>
