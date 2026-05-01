@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { collection, addDoc, serverTimestamp, doc, onSnapshot, updateDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * ThreadHistory Component
@@ -61,6 +62,7 @@ interface Message {
  * A "Live-Drop" intermediary messaging system.
  */
 export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -71,6 +73,17 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'waiting' | 'reviewing' | 'responded' | 'error'>('idle');
   const [inquiryId, setInquiryId] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(300); // 5 minutes in seconds
+
+  // Persistence: Restore session for guests
+  useEffect(() => {
+    if (!user) {
+      const savedId = localStorage.getItem('active-pulse-id');
+      if (savedId) {
+        setInquiryId(savedId);
+        setStatus('waiting');
+      }
+    }
+  }, [user]);
 
   // Handle Countdown Timer
   useEffect(() => {
@@ -91,14 +104,21 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       if (docSnap.exists()) {
         const data = docSnap.data();
         
-        // If it's processed and there's still a draft, it's Rank 1/2 (Needs review)
+        // Hydrate form data if missing (e.g. on refresh)
+        if (!formData.name && data.name) {
+          setFormData(prev => ({ ...prev, name: data.name, email: data.email, topic: data.topic }));
+        }
+
         if (data.processed && data.zen3_draft) {
            setStatus('reviewing');
         }
-        // If it's processed and no draft, it's either auto-replied or admin-handled
         else if (data.processed && !data.zen3_draft) {
            setStatus('responded');
         }
+      } else {
+        localStorage.removeItem('active-pulse-id');
+        setInquiryId(null);
+        setStatus('idle');
       }
     });
 
@@ -130,6 +150,7 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
     try {
       const inquiryData = {
         ...formData,
+        userId: user?.uid || null,
         timestamp: serverTimestamp(),
         processed: false,
         source: 'educator-hub-v2'
@@ -137,6 +158,11 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       
       const docRef = await addDoc(collection(db, 'inquiries'), inquiryData);
       setInquiryId(docRef.id);
+      
+      if (!user) {
+        localStorage.setItem('active-pulse-id', docRef.id);
+      }
+
       setStatus('waiting');
       if (onSuccess) onSuccess();
     } catch (error) {
@@ -151,10 +177,10 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-2xl max-w-xl mx-auto flex flex-col h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="flex items-center justify-between border-b border-gray-50 pb-4 mb-4">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold">AI</div>
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold animate-pulse">AI</div>
             <div>
-              <h4 className="font-bold text-sm text-on-surface leading-none">Inquiry Sync</h4>
-              <span className="text-[10px] text-gray-400 uppercase tracking-tighter">Live Connection • {formData.topic}</span>
+              <h4 className="font-bold text-sm text-on-surface leading-none">AI Learning Assistant</h4>
+              <span className="text-[10px] text-gray-400 uppercase tracking-tighter">Live Pulse • {formData.topic}</span>
             </div>
           </div>
           <div className="bg-primary/5 px-3 py-1 rounded-full border border-primary/10">
@@ -165,6 +191,12 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-gray-200 flex flex-col">
+          {!user && (
+            <div className="bg-orange-50 border border-orange-100 p-3 rounded-xl text-[10px] text-orange-700 flex items-start gap-2 mb-2">
+              <span className="material-symbols-outlined text-[14px] mt-0.5">info</span>
+              <p>You're chatting as a guest. Your conversation is active for this session only. <strong>Sign in to save your thread.</strong></p>
+            </div>
+          )}
           <div className="flex justify-end">
             <div className="bg-primary text-white p-4 rounded-2xl rounded-tr-none text-sm max-w-[85%] shadow-sm">
               <p className="font-bold text-[10px] uppercase text-white/70 mb-1">You</p>
@@ -184,7 +216,7 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                     <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]"></div>
                     <div className="w-1 h-1 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]"></div>
                   </div>
-                  <span>Thinking...</span>
+                  <span>{timeLeft > 0 ? 'Checking DepEd 003 guidelines...' : 'Finalizing response...'}</span>
                 </div>
               </div>
             </div>
@@ -196,7 +228,7 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
                 <p className="font-bold text-[10px] uppercase text-primary mb-2">Status: High Priority</p>
                 <div className="flex items-center space-x-2 text-primary/70 italic text-xs">
                   <span className="material-symbols-outlined text-[14px]">verified_user</span>
-                  <span>This inquiry has been flagged for Zen's personal review. Estimated wait: 24h.</span>
+                  <span>Flagged for Zen's review. Estimated wait: 24h.</span>
                 </div>
               </div>
             </div>

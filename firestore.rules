@@ -13,9 +13,14 @@ service cloud.firestore {
                    && request.resource.data.message.size() < 2000
                    && request.resource.data.name.size() < 100;
       
-      allow read: if true; 
-      allow update: if (request.resource.data.diff(resource.data).affectedKeys()
+      // Persistence Logic:
+      // 1. Logged-in users can read/update if they are the owner (linked by uid)
+      // 2. Non-logged-in users can only read/update by ID (ephemeral session)
+      allow read: if (resource.data.userId == null) || (request.auth != null && request.auth.uid == resource.data.userId);
+      
+      allow update: if ((request.resource.data.diff(resource.data).affectedKeys()
                     .hasOnly(['message', 'processed', 'zen3_draft', 'timestamp']))
+                    && (resource.data.userId == null || (request.auth != null && request.auth.uid == resource.data.userId)))
                     || (request.auth != null && request.auth.token.admin == true);
       
       allow delete: if request.auth != null && request.auth.token.admin == true;

@@ -14,7 +14,7 @@ const ChatWidget: React.FC = () => {
   const [hasNotification, setHasNotification] = useState(true);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] font-sans">
+    <div className="fixed bottom-6 right-6 z-[100] font-sans flex flex-col items-end">
       {/* Floating Window */}
       <div className={`mb-4 w-[350px] md:w-[450px] transition-all duration-300 transform ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}`}>
         <div className="relative">
@@ -33,22 +33,36 @@ const ChatWidget: React.FC = () => {
         </div>
       </div>
 
-      {/* Toggle Button */}
-      <button 
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setHasNotification(false);
-        }}
-        className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition active:scale-95 group relative"
-      >
-        <span className="text-2xl group-hover:hidden">💬</span>
-        <span className="text-2xl hidden group-hover:block">🤖</span>
-        
-        {/* Unread Indicator */}
-        {hasNotification && !isOpen && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white animate-pulse"></div>
+      {/* Toggle Button & Label */}
+      <div className="flex items-center gap-3">
+        {/* Branding Label */}
+        {!isOpen && (
+          <div className="bg-white border border-outline-variant/10 px-4 py-2 rounded-2xl shadow-xl animate-in fade-in slide-in-from-right-4 duration-500">
+            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em] leading-none mb-0.5">Project AIgnite</p>
+            <p className="text-sm font-black text-on-surface leading-none">Pulse Messages</p>
+          </div>
         )}
-      </button>
+
+        <button 
+          onClick={() => {
+            setIsOpen(!isOpen);
+            setHasNotification(false);
+          }}
+          className={`w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all active:scale-95 group relative ${isOpen ? 'rotate-90' : ''}`}
+        >
+          <span className={`material-symbols-outlined text-3xl transition-all duration-300 ${isOpen ? 'scale-0' : 'scale-100'}`}>
+            favorite
+          </span>
+          <span className={`absolute inset-0 flex items-center justify-center material-symbols-outlined text-3xl transition-all duration-300 ${isOpen ? 'scale-100' : 'scale-0 opacity-0'}`}>
+            close
+          </span>
+          
+          {/* Unread Indicator */}
+          {hasNotification && !isOpen && (
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white animate-pulse"></div>
+          )}
+        </button>
+      </div>
     </div>
   );
 };
