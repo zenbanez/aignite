@@ -1,46 +1,38 @@
-@import "tailwindcss";
-
-@theme {
-  --color-surface: #f9f9f8;
-  --color-surface-container-low: #f4f4f3;
-  --color-surface-container: #ebecec;
-  --color-surface-container-high: #e1e3e4;
-  --color-surface-container-highest: #d7d9da;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-bright: #fbfbfb;
-  --color-surface-variant: #e1e3e4;
-  
-  --color-on-surface: #1a1c1c;
-  --color-on-surface-variant: #494a4a;
-  
-  --color-primary: #00464a;
-  --color-primary-container: #006064;
-  
-  --color-tertiary: #ffdeac;
-  --color-tertiary-fixed: #ffdeac;
-  --color-on-tertiary-fixed: #241a0a;
-  
-  --color-outline: #797c7c;
-  --color-outline-variant: #bec8c9;
-  
-  --radius-sm: 0.25rem;
-  --radius-md: 0.75rem;
-  --radius-xl: 1.5rem;
-  
-  --font-headline: var(--font-noto-serif);
-  --font-body: var(--font-manrope);
-  --font-label: var(--font-manrope);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --font-noto-serif: "Noto Serif", serif;
   --font-manrope: "Manrope", sans-serif;
+  
+  --surface: #f9f9f8;
+  --surface-container-low: #f4f4f3;
+  --surface-container: #ebecec;
+  --surface-container-high: #e1e3e4;
+  --surface-container-highest: #d7d9da;
+  --surface-container-lowest: #ffffff;
+  --surface-bright: #fbfbfb;
+  --surface-variant: #e1e3e4;
+  
+  --on-surface: #1a1c1c;
+  --on-surface-variant: #494a4a;
+  
+  --primary: #00464a;
+  --primary-container: #006064;
+  
+  --tertiary: #ffdeac;
+  --tertiary-fixed: #ffdeac;
+  --on-tertiary-fixed: #241a0a;
+  
+  --outline: #797c7c;
+  --outline-variant: #bec8c9;
 }
 
 body {
   font-family: var(--font-manrope);
-  background-color: var(--color-surface);
-  color: var(--color-on-surface);
+  background-color: var(--surface);
+  color: var(--on-surface);
 }
 
 h1, h2, h3, h4, h5, h6 {

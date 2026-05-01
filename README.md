@@ -10,6 +10,7 @@ The project is now a functional **Digital Atelier** and **Administrative Hub**:
 *   **Educators Hub:** Located at `projects/project_aignite/educator-hub`.
 *   **Curated Intelligence:** News briefings migrated from static JSON to the `aignite` Firestore database instance.
 *   **Admin Dashboard:** Secure `/admin` route live for Zen, featuring:
+    *   **Inquiry Inbox:** Real-time stream of teacher inquiries with Firestore-backed persistence.
     *   **News Management:** CRUD operations for the news stream.
     *   **User Management:** Real-time searchable list of all registered teachers.
 *   **Backend Infrastructure:** Firebase Admin SDK integrated with secure `service-account.json` (git-ignored) for elevated operations.

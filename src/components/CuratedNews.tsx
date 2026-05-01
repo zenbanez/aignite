@@ -89,7 +89,7 @@ export default function CuratedNews() {
                 </article>
               ))}
               
-              <div className="bg-primary/5 border-2 border-dashed border-primary/20 rounded-2xl p-8 flex flex-col items-center justify-center text-center">
+              <div className="bg-primary/5 border-2 border-dashed border-primary/20 rounded-2xl p-8 flex flex-col items-center justify-center text-center text-on-surface">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                   <span className="text-2xl">🌱</span>
                 </div>

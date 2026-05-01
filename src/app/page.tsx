@@ -1,6 +1,12 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import CuratedNews from "@/components/CuratedNews";
+
+// Pre-load components to prevent hydration mismatch while still keeping them client-side only
+const CuratedNews = dynamic(() => import("@/components/CuratedNews"), { 
+  ssr: false,
+  loading: () => <div className="h-96 animate-pulse bg-surface-container-low rounded-2xl"></div>
+});
 
 export default function Home() {
   return (

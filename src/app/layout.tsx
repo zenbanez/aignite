@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 import { AuthProvider } from "@/context/AuthContext";
 import { MasteryProvider } from "@/context/MasteryContext";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
             <Navbar />
             <main className="pt-20">{children}</main>
             <Footer />
+            <ChatWidget />
           </MasteryProvider>
         </AuthProvider>
       </body>

@@ -7,6 +7,27 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.token.admin == true;
     }
     
+    // Inquiries: Public create/read/update (for async thread), Admin full access
+    match /inquiries/{inquiryId} {
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'message'])
+                   && request.resource.data.message.size() < 2000
+                   && request.resource.data.name.size() < 100;
+      
+      allow read: if true; 
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['message', 'processed', 'zen3_draft', 'timestamp']))
+                    || (request.auth != null && request.auth.token.admin == true);
+      
+      allow delete: if request.auth != null && request.auth.token.admin == true;
+
+      // Replies sub-collection
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if true; // In prod, restrict this to either user of the inquiry or admin
+        allow update, delete: if request.auth != null && request.auth.token.admin == true;
+      }
+    }
+    
     // Users collection: Admins can see all, users can see/edit themselves
     match /users/{userId} {
       allow read: if request.auth != null && (request.auth.token.admin == true || request.auth.uid == userId);
