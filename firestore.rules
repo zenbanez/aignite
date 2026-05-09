@@ -6,6 +6,12 @@ service cloud.firestore {
       allow read: if true;
       allow write: if request.auth != null && request.auth.token.admin == true;
     }
+
+    // Resources collection: Public read, Admin write
+    match /resources/{resId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
     
     // Inquiries: Public create/read/update (for async thread), Admin full access
     match /inquiries/{inquiryId} {
@@ -14,9 +20,9 @@ service cloud.firestore {
                    && request.resource.data.name.size() < 100;
       
       // Persistence Logic:
-      // 1. Logged-in users can read/update if they are the owner (linked by uid)
+      // 1. Logged-in users can read/update if they are the owner (linked by uid) or if they are an admin
       // 2. Non-logged-in users can only read/update by ID (ephemeral session)
-      allow read: if (resource.data.userId == null) || (request.auth != null && request.auth.uid == resource.data.userId);
+      allow read: if (resource.data.userId == null) || (request.auth != null && (request.auth.uid == resource.data.userId || request.auth.token.admin == true));
       
       allow update: if ((request.resource.data.diff(resource.data).affectedKeys()
                     .hasOnly(['message', 'processed', 'zen3_draft', 'timestamp']))

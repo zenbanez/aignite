@@ -18,12 +18,8 @@ export default function CuratedNews() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Only attempt fetch in the browser and with a valid key
-    const apiKey = db.app.options.apiKey;
-    if (typeof window === "undefined" || !apiKey || apiKey.includes("BUILD-TIME")) {
-      setLoading(false);
-      return;
-    }
+    // Only attempt fetch in the browser
+    if (typeof window === "undefined") return;
 
     const fetchNews = async () => {
       try {
@@ -63,31 +59,37 @@ export default function CuratedNews() {
             </div>
           ) : (
             <>
-              {newsItems.map((item) => (
-                <article key={item.id} className="group cursor-pointer">
-                  <div className="bg-surface-container-low rounded-2xl p-8 h-full border border-surface-variant/20 group-hover:border-primary/30 group-hover:shadow-xl group-hover:shadow-primary/5 transition-all duration-300">
-                    <div className="flex items-center gap-4 mb-6">
-                      <span className="text-secondary font-bold text-xs uppercase tracking-widest">{item.category}</span>
-                      <span className="w-1 h-1 bg-on-surface-variant/30 rounded-full"></span>
-                      <span className="text-on-surface-variant text-xs font-medium">{item.date}</span>
+              {newsItems.length === 0 ? (
+                <div className="lg:col-span-2 p-8 bg-surface-container-low rounded-2xl border border-dashed border-outline-variant/30 flex items-center justify-center text-on-surface-variant italic">
+                  No briefings found. Stay tuned for the next cycle.
+                </div>
+              ) : (
+                newsItems.map((item) => (
+                  <article key={item.id} className="group cursor-pointer">
+                    <div className="bg-surface-container-low rounded-2xl p-8 h-full border border-surface-variant/20 group-hover:border-primary/30 group-hover:shadow-xl group-hover:shadow-primary/5 transition-all duration-300">
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="text-secondary font-bold text-xs uppercase tracking-widest">{item.category}</span>
+                        <span className="w-1 h-1 bg-on-surface-variant/30 rounded-full"></span>
+                        <span className="text-on-surface-variant text-xs font-medium">{item.date}</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-primary mb-4 group-hover:text-secondary transition-colors leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-on-surface-variant leading-relaxed mb-8 line-clamp-3">
+                        {item.excerpt}
+                      </p>
+                      <div className="mt-auto">
+                        <span className="text-primary font-bold text-sm inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                          Read Briefing
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </span>
+                      </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-primary mb-4 group-hover:text-secondary transition-colors leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-on-surface-variant leading-relaxed mb-8 line-clamp-3">
-                      {item.excerpt}
-                    </p>
-                    <div className="mt-auto">
-                      <span className="text-primary font-bold text-sm inline-flex items-center gap-2 group-hover:gap-3 transition-all">
-                        Read Briefing
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                ))
+              )}
               
               <div className="bg-primary/5 border-2 border-dashed border-primary/20 rounded-2xl p-8 flex flex-col items-center justify-center text-center text-on-surface">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">

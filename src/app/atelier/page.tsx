@@ -24,7 +24,7 @@ export default function AtelierPage() {
       <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-12 items-center w-full">
         <div className="md:col-span-7 space-y-6">
           <h1 className="text-5xl md:text-6xl font-headline font-black text-primary leading-tight">
-            Welcome to your <br/><span className="italic text-secondary">Digital Atelier.</span>
+            Welcome to your <br /><span className="italic text-secondary">Digital Atelier.</span>
           </h1>
           <p className="text-xl text-on-surface-variant font-light max-w-xl leading-relaxed font-body">
             AIgnite isn't just a tool; it's a sanctuary for your professional growth. Let's configure your workspace to support your unique teaching style.
@@ -68,8 +68,8 @@ export default function AtelierPage() {
               {user ? 'Take the Mastery Quiz' : 'Define Your Voice'}
             </h3>
             <p className="text-on-surface-variant leading-relaxed font-body">
-              {user 
-                ? 'Prove your prowess and boost your rank. Our quiz tests your understanding of ethical AI implementation and prompt engineering.' 
+              {user
+                ? 'Prove your prowess and boost your rank. Our quiz tests your understanding of ethical AI implementation and prompt engineering.'
                 : "AIgnite learns how you speak. Upload a sample of your writing or select a persona style so your AI-generated materials feel authentically yours."
               }
             </p>
@@ -107,8 +107,8 @@ export default function AtelierPage() {
             <h3 className="text-2xl font-bold text-primary font-headline">Wellness Check-in</h3>
             <p className="text-on-surface-variant leading-relaxed mt-4 font-body">Set boundaries for your digital classroom. We'll help you schedule 'Quiet Hours' where AI assists with grading while you disconnect.</p>
           </div>
-          <Link className="mt-8 flex items-center gap-2 font-bold text-secondary font-label group" href="/login">
-            Schedule boundaries
+          <Link className="mt-8 flex items-center gap-2 font-bold text-secondary font-label group" href="/wellbeing">
+            See Wellness Tips
           </Link>
         </div>
 
@@ -122,26 +122,6 @@ export default function AtelierPage() {
           </Link>
         </div>
 
-        <div className="bg-primary p-10 rounded-[2rem] text-white flex flex-col justify-between relative overflow-hidden">
-          <div className="z-10">
-            <h3 className="text-2xl font-headline font-bold mb-4">Join the Atelier</h3>
-            <p className="text-primary-fixed leading-relaxed opacity-90 font-body">Connect with 5,000+ educators sharing curated AI workflows and prompt templates.</p>
-          </div>
-          <button className="z-10 mt-8 bg-white text-primary px-6 py-3 rounded-xl font-bold text-xs tracking-widest self-start font-label">
-            ENTER FORUM
-          </button>
-        </div>
-
-        <div className="md:col-span-2 bg-surface-container-lowest p-10 rounded-[2rem] shadow-sm border border-stone-100 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="rounded-2xl bg-surface-container h-48 md:h-full"></div>
-          <div className="flex flex-col justify-center">
-            <h3 className="text-2xl font-bold text-primary mb-4 font-headline">Lesson Hub Sync</h3>
-            <p className="text-on-surface-variant leading-relaxed font-body">Connect your Google Classroom or Canvas. AIgnite will analyze your existing syllabus to suggest AI-enhanced activities automatically.</p>
-            <button className="mt-6 flex items-center gap-2 font-bold text-primary px-1 py-1 rounded-lg hover:underline decoration-tertiary decoration-2 underline-offset-4 font-label">
-              Connect LMS
-            </button>
-          </div>
-        </div>
       </div>
     </main>
   );

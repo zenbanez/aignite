@@ -29,13 +29,12 @@ const ThreadHistory: React.FC<{ inquiryId: string }> = ({ inquiryId }) => {
     <div ref={scrollRef} className="space-y-4">
       {replies.map((reply) => (
         <div key={reply.id} className={`flex ${reply.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-          <div className={`p-4 rounded-2xl text-sm max-w-[85%] shadow-sm ${
-            reply.sender === 'user' 
-              ? 'bg-primary text-white rounded-tr-none' 
-              : reply.sender === 'admin'
-                ? 'bg-primary/10 border border-primary/20 text-on-surface rounded-tl-none ring-2 ring-primary/5 shadow-md'
-                : 'bg-secondary/10 border border-secondary/20 text-on-surface rounded-tl-none'
-          }`}>
+          <div className={`p-4 rounded-2xl text-sm max-w-[85%] shadow-sm ${reply.sender === 'user'
+            ? 'bg-primary text-white rounded-tr-none'
+            : reply.sender === 'admin'
+              ? 'bg-primary/10 border border-primary/20 text-on-surface rounded-tl-none ring-2 ring-primary/5 shadow-md'
+              : 'bg-secondary/10 border border-secondary/20 text-on-surface rounded-tl-none'
+            }`}>
             <p className="font-bold text-[10px] uppercase mb-1 opacity-70">
               {reply.sender === 'user' ? 'You' : reply.sender === 'admin' ? '👤 Zen (Admin)' : '🤖 AI Assistant'}
             </p>
@@ -69,7 +68,7 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
     topic: 'General Inquiry',
     message: ''
   });
-  
+
   const [status, setStatus] = useState<'idle' | 'submitting' | 'waiting' | 'reviewing' | 'responded' | 'error'>('idle');
   const [inquiryId, setInquiryId] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(300); // 5 minutes in seconds
@@ -103,17 +102,17 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
     const unsubDoc = onSnapshot(doc(db, 'inquiries', inquiryId), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        
+
         // Hydrate form data if missing (e.g. on refresh)
         if (!formData.name && data.name) {
           setFormData(prev => ({ ...prev, name: data.name, email: data.email, topic: data.topic }));
         }
 
         if (data.processed && data.zen3_draft) {
-           setStatus('reviewing');
+          setStatus('reviewing');
         }
         else if (data.processed && !data.zen3_draft) {
-           setStatus('responded');
+          setStatus('responded');
         }
       } else {
         localStorage.removeItem('active-pulse-id');
@@ -126,14 +125,14 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       query(collection(db, 'inquiries', inquiryId, 'replies'), orderBy('timestamp', 'asc')),
       (snap) => {
         if (!snap.empty) {
-            setStatus('responded');
+          setStatus('responded');
         }
       }
     );
 
     return () => {
-        unsubDoc();
-        unsubReplies();
+      unsubDoc();
+      unsubReplies();
     };
   }, [inquiryId]);
 
@@ -155,10 +154,10 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
         processed: false,
         source: 'educator-hub-v2'
       };
-      
+
       const docRef = await addDoc(collection(db, 'inquiries'), inquiryData);
       setInquiryId(docRef.id);
-      
+
       if (!user) {
         localStorage.setItem('active-pulse-id', docRef.id);
       }
@@ -236,28 +235,28 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
         </div>
 
         <div className="mt-4 pt-4 border-t border-gray-100 flex gap-2">
-            <input 
-              type="text" 
-              placeholder="Type to sync..."
-              className="flex-1 bg-surface-container-highest border-none rounded-xl px-4 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 outline-none"
-              onKeyDown={async (e) => {
-                if (e.key === 'Enter') {
-                  const target = e.target as HTMLInputElement;
-                  const val = target.value.trim();
-                  if (val && inquiryId) {
-                    await updateDoc(doc(db, 'inquiries', inquiryId), { processed: false, zen3_draft: null });
-                    await addDoc(collection(db, 'inquiries', inquiryId, 'replies'), {
-                        text: val,
-                        sender: 'user',
-                        timestamp: serverTimestamp()
-                    });
-                    setTimeLeft(300);
-                    setStatus('waiting');
-                    target.value = '';
-                  }
+          <input
+            type="text"
+            placeholder="Type to sync..."
+            className="flex-1 bg-surface-container-highest border-none rounded-xl px-4 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 outline-none"
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') {
+                const target = e.target as HTMLInputElement;
+                const val = target.value.trim();
+                if (val && inquiryId) {
+                  await updateDoc(doc(db, 'inquiries', inquiryId), { processed: false, zen3_draft: null });
+                  await addDoc(collection(db, 'inquiries', inquiryId, 'replies'), {
+                    text: val,
+                    sender: 'user',
+                    timestamp: serverTimestamp()
+                  });
+                  setTimeLeft(300);
+                  setStatus('waiting');
+                  target.value = '';
                 }
-              }}
-            />
+              }
+            }}
+          />
         </div>
       </div>
     );
@@ -265,37 +264,37 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <div className="bg-surface-container-low p-8 rounded-3xl shadow-sm border border-outline-variant/10 max-w-xl mx-auto">
-      <h3 className="text-2xl font-bold mb-2 text-on-surface">Leave a Note</h3>
-      <p className="text-on-surface-variant mb-8 text-sm">No bot, no waiting—just a direct line to our next sync cycle.</p>
-      
+      <h3 className="text-2xl font-bold mb-2 text-on-surface">Send a Pulse Message</h3>
+      <p className="text-on-surface-variant mb-8 text-sm">Guaranteed Replies on the next Heartbeat.</p>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input 
+          <input
             required placeholder="Name"
             className="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 outline-none"
-            value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+            value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
           />
-          <input 
+          <input
             type="email" required placeholder="Email"
             className="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 outline-none"
-            value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
+            value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
-        <select 
+        <select
           className="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 outline-none appearance-none"
-          value={formData.topic} onChange={e => setFormData({...formData, topic: e.target.value})}
+          value={formData.topic} onChange={e => setFormData({ ...formData, topic: e.target.value })}
         >
           <option>General Inquiry</option>
           <option>eBook Purchase Support</option>
           <option>Workshop Booking</option>
           <option>Partnership Proposal</option>
         </select>
-        <textarea 
+        <textarea
           required rows={4} placeholder="How can we help?"
           className="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/20 outline-none resize-none"
-          value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})}
+          value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
         />
-        <button 
+        <button
           type="submit" disabled={status === 'submitting'}
           className="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-primary/90 transition disabled:opacity-50"
         >

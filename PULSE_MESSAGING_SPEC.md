@@ -16,7 +16,18 @@ Pulse Messaging operates on a **Batch-Processed Dead-Drop** model.
 
 ---
 
-## 2. The Logic Lanes (The "Fast vs. Expert" Model)
+## 2. The Pulse Workflow (The "Zen3 Lighthouse Sweep")
+The system follows a strict 5-step lifecycle every 5 minutes:
+
+1.  **Wake-Up:** The OpenClaw Scheduler triggers the agent turn.
+2.  **The Trigger:** The agent executes the `process-inquiries.js` script.
+3.  **The Sweep:** The script filters for un-processed inquiries in Firestore, categorizes/ranks them (1-5), and triggers the appropriate "Lane" (Fast/AI or Expert/Human).
+4.  **The Signal:** If no new data exists, the script returns `NO_NEW_DATA`.
+5.  **The Delivery Filter:** If `NO_NEW_DATA` is detected, the agent returns `NO_REPLY` to OpenClaw, suppressing any notification to the admin, ensuring the admin's peace of mind.
+
+---
+
+## 3. The Logic Lanes (The "Fast vs. Expert" Model)
 Every incoming Pulse is categorized and ranked (1-5) by the processing engine to protect the expert's attention.
 
 | Rank | Category | Behavior | Response Type | Perceived Value |

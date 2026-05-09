@@ -36,5 +36,11 @@ service firebase.storage {
       allow read: if isCommittee();
       allow write: if isCommittee();
     }
+
+    // Educational Resources
+    match /resources/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, addDoc, query, orderBy, serverTimestamp, updateDoc, limit, startAfter } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../lib/firebase';
 import { useAuth } from '../context/AuthContext';
 
 interface Inquiry {
@@ -37,12 +38,24 @@ interface NewsItem {
   excerpt: string;
 }
 
+interface Resource {
+  id: string;
+  title: string;
+  description: string;
+  link: string;
+  isExternal: boolean;
+  actionText: string;
+  bannerClass: string;
+  fileUrl?: string;
+}
+
 export default function AdminPanel() {
   const { user } = useAuth();
   
   // Dashboard State
   const [news, setNews] = useState<NewsItem[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,6 +69,17 @@ export default function AdminPanel() {
   const [newTitle, setNewTitle] = useState('');
   const [newCategory, setNewCategory] = useState('Policy');
   const [newExcerpt, setNewExcerpt] = useState('');
+  
+  // Resource Form State
+  const [resTitle, setResTitle] = useState('');
+  const [resDesc, setResDesc] = useState('');
+  const [resLink, setResLink] = useState('');
+  const [resAction, setResAction] = useState('Explore →');
+  const [resExternal, setResExternal] = useState(false);
+  const [resBanner, setResBanner] = useState('bg-primary');
+  const [resFile, setResFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [draftReply, setDraftReply] = useState<{ [key: string]: string }>({});
 
   const fetchData = async (isNextPage = false) => {
@@ -64,10 +88,13 @@ export default function AdminPanel() {
       setError(null);
       
       const newsSnap = await getDocs(collection(db, 'news'));
-      setNews(newsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as NewsItem)));
+      setNews(newsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as NewsItem)));
       
+      const resSnap = await getDocs(collection(db, 'resources'));
+      setResources(resSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as Resource)));
+
       const usersSnap = await getDocs(collection(db, 'users'));
-      setUsers(usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as User)));
+      setUsers(usersSnap.docs.map(doc => ({ ...doc.data(), id: doc.id } as User)));
 
       // Combined Query: Order by Rank (1-5) then by Timestamp (desc), limited to 5
       let inqQuery = query(
@@ -94,11 +121,11 @@ export default function AdminPanel() {
         let replies: Reply[] = [];
         try {
           const repliesSnap = await getDocs(query(collection(db, 'inquiries', inqDoc.id, 'replies'), orderBy('timestamp', 'asc')));
-          replies = repliesSnap.docs.map(rd => ({ id: rd.id, ...rd.data() } as Reply));
+          replies = repliesSnap.docs.map(rd => ({ ...rd.data(), id: rd.id } as Reply));
         } catch (repErr) {
           console.error(`Error fetching replies for ${inqDoc.id}:`, repErr);
         }
-        return { id: inqDoc.id, ...data, replies };
+        return { ...data, id: inqDoc.id, replies };
       }));
 
       if (isNextPage) {
@@ -119,10 +146,7 @@ export default function AdminPanel() {
   };
 
   useEffect(() => {
-    const apiKey = db.app.options.apiKey;
-    if (!user || typeof window === "undefined" || !apiKey || apiKey.includes("BUILD-TIME")) {
-      return;
-    }
+    if (!user || typeof window === "undefined") return;
     fetchData();
   }, [user]);
 
@@ -195,12 +219,60 @@ export default function AdminPanel() {
         excerpt: newExcerpt,
         date: new Date().toISOString().split('T')[0]
       });
-      setNews([{ id: docRef.id, title: newTitle, category: newCategory, excerpt: newExcerpt, date: new Date().toISOString().split('T')[0] }, ...news]);
+      setNews([{ ...{ title: newTitle, category: newCategory, excerpt: newExcerpt, date: new Date().toISOString().split('T')[0] }, id: docRef.id }, ...news]);
       setNewTitle('');
       setNewExcerpt('');
     } catch (err) {
       console.error("Error adding news:", err);
       alert("Failed to add news.");
+    }
+  };
+
+  const handleAddResource = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsUploading(true);
+      let fileUrl = '';
+      
+      if (resFile) {
+        const fileRef = ref(storage, `resources/${Date.now()}_${resFile.name}`);
+        const uploadResult = await uploadBytes(fileRef, resFile);
+        fileUrl = await getDownloadURL(uploadResult.ref);
+      }
+
+      const resData = {
+        title: resTitle,
+        description: resDesc,
+        link: fileUrl || resLink,
+        actionText: resAction,
+        isExternal: !fileUrl && resExternal,
+        bannerClass: resBanner,
+        fileUrl: fileUrl || undefined
+      };
+      
+      const docRef = await addDoc(collection(db, 'resources'), resData);
+      setResources([{ ...resData, id: docRef.id }, ...resources]);
+      
+      // Reset
+      setResTitle('');
+      setResDesc('');
+      setResLink('');
+      setResFile(null);
+    } catch (err) {
+      console.error("Error adding resource:", err);
+      alert("Failed to add resource.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeleteResource = async (id: string) => {
+    if (!confirm('Delete this resource?')) return;
+    try {
+      await deleteDoc(doc(db, 'resources', id));
+      setResources(resources.filter(r => r.id !== id));
+    } catch (err) {
+      console.error("Error deleting resource:", err);
     }
   };
 
@@ -429,6 +501,60 @@ export default function AdminPanel() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        {/* Resources Management */}
+        <section className="bg-surface-container-low p-6 rounded-3xl shadow-sm border border-outline-variant/10 lg:col-span-2">
+          <h2 className="text-xl font-bold mb-6 text-primary">Resources Management</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <form onSubmit={handleAddResource} className="space-y-4">
+              <input value={resTitle} onChange={e => setResTitle(e.target.value)} placeholder="Resource Title" className="w-full p-3 bg-surface-container-highest rounded-xl" required />
+              <textarea value={resDesc} onChange={e => setResDesc(e.target.value)} placeholder="Description" className="w-full p-3 bg-surface-container-highest rounded-xl h-24" required />
+              <div className="grid grid-cols-2 gap-4">
+                <input value={resLink} onChange={e => setResLink(e.target.value)} placeholder="Link / Path" className="p-3 bg-surface-container-highest rounded-xl" required />
+                <input value={resAction} onChange={e => setResAction(e.target.value)} placeholder="Action Text" className="p-3 bg-surface-container-highest rounded-xl" required />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <select value={resBanner} onChange={e => setResBanner(e.target.value)} className="p-3 bg-surface-container-highest rounded-xl">
+                  <option value="bg-primary">Teal (Primary)</option>
+                  <option value="bg-[#006064]">Dark Cyan</option>
+                  <option value="bg-stone-800">Stone (Dark)</option>
+                  <option value="bg-[#744f00]">Amber (Deep)</option>
+                </select>
+                <label className="flex items-center gap-2 text-xs font-bold text-on-surface-variant uppercase px-3">
+                  <input type="checkbox" checked={resExternal} onChange={e => setResExternal(e.target.checked)} />
+                  External Link?
+                </label>
+              </div>
+              <div className="p-3 bg-surface-container-highest rounded-xl border-2 border-dashed border-outline-variant/10">
+                <p className="text-[10px] font-bold text-on-surface-variant uppercase mb-2">Upload File (Optional)</p>
+                <input 
+                  type="file" 
+                  onChange={e => setResFile(e.target.files?.[0] || null)}
+                  className="text-xs text-on-surface w-full"
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={isUploading}
+                className="w-full py-3 bg-primary text-white font-bold rounded-xl disabled:opacity-50"
+              >
+                {isUploading ? 'Uploading...' : 'Add Resource'}
+              </button>
+            </form>
+
+            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+              {resources.map(res => (
+                <div key={res.id} className="p-4 border border-outline-variant/10 rounded-xl bg-surface-container flex justify-between items-center">
+                  <div>
+                    <p className="font-bold text-sm text-primary">{res.title}</p>
+                    <p className="text-[10px] text-on-surface-variant line-clamp-1">{res.description}</p>
+                  </div>
+                  <button onClick={() => handleDeleteResource(res.id)} className="text-error font-bold text-xs p-2">Delete</button>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       </div>
