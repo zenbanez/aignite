@@ -60,7 +60,7 @@ interface Message {
  * InquiryForm
  * A "Live-Drop" intermediary messaging system.
  */
-export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
+export default function InquiryForm({ onResponse }: { onResponse?: () => void }) {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
@@ -114,6 +114,9 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
         else if (data.processed && !data.zen3_draft) {
           setStatus('responded');
         }
+        else if (!data.processed) {
+          setStatus('waiting');
+        }
       } else {
         localStorage.removeItem('active-pulse-id');
         setInquiryId(null);
@@ -125,7 +128,12 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       query(collection(db, 'inquiries', inquiryId, 'replies'), orderBy('timestamp', 'asc')),
       (snap) => {
         if (!snap.empty) {
-          setStatus('responded');
+          // Only trigger notification callback, don't force status change here
+          // as the document listener handles the authoritative state.
+          if (onResponse) {
+            const lastReply = snap.docs[snap.docs.length - 1].data();
+            if (lastReply.sender !== 'user') onResponse();
+          }
         }
       }
     );
@@ -163,7 +171,6 @@ export default function InquiryForm({ onSuccess }: { onSuccess?: () => void }) {
       }
 
       setStatus('waiting');
-      if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Inquiry error:', error);
       setStatus('error');

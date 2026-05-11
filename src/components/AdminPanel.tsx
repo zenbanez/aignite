@@ -13,6 +13,7 @@ interface Inquiry {
   zen3_draft?: string;
   zen3_rank?: number;
   processed: boolean;
+  archived?: boolean;
   timestamp: any;
   replies?: Reply[];
 }
@@ -65,6 +66,7 @@ export default function AdminPanel() {
   // Pagination State
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [viewMode, setViewMode] = useState<'active' | 'archived'>('active');
 
   // Form State
   const [newTitle, setNewTitle] = useState('');
@@ -130,10 +132,15 @@ export default function AdminPanel() {
         return { ...data, id: inqDoc.id, replies };
       }));
 
+      // Filter based on viewMode (Active vs Archived)
+      const filteredInqs = inqsWithReplies.filter(inq => 
+        viewMode === 'archived' ? inq.archived === true : !inq.archived
+      );
+
       if (isNextPage) {
-        setInquiries(prev => [...prev, ...inqsWithReplies]);
+        setInquiries(prev => [...prev, ...filteredInqs]);
       } else {
-        setInquiries(inqsWithReplies);
+        setInquiries(filteredInqs);
       }
 
       setLastVisible(inqSnap.docs[inqSnap.docs.length - 1]);
@@ -150,7 +157,7 @@ export default function AdminPanel() {
   useEffect(() => {
     if (!user || typeof window === "undefined") return;
     fetchData();
-  }, [user]);
+  }, [user, viewMode]);
 
   const handleAdminReply = async (inquiryId: string) => {
     const text = draftReply[inquiryId];
@@ -175,6 +182,26 @@ export default function AdminPanel() {
     } catch (err) {
       console.error("Error sending admin reply:", err);
       alert("Failed to send reply.");
+    }
+  };
+
+  const handleArchiveInquiry = async (id: string, currentStatus: boolean) => {
+    try {
+      await updateDoc(doc(db, 'inquiries', id), { archived: !currentStatus });
+      setInquiries(prev => prev.filter(inq => inq.id !== id));
+    } catch (err) {
+      console.error("Error archiving inquiry:", err);
+    }
+  };
+
+  const handleDeleteInquiry = async (id: string) => {
+    if (!confirm('Permanently delete this inquiry and all its history?')) return;
+    try {
+      await deleteDoc(doc(db, 'inquiries', id));
+      setInquiries(prev => prev.filter(inq => inq.id !== id));
+    } catch (err) {
+      console.error("Error deleting inquiry:", err);
+      alert("Failed to delete inquiry.");
     }
   };
 
@@ -280,12 +307,26 @@ export default function AdminPanel() {
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    (u.email || "").toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredUsers = users.filter((u) => {
+    const email = u.email || "";
+    return email.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
-  if (!user) return <div className="p-8 pt-32 max-w-7xl mx-auto text-on-surface">Please login to access the admin panel.</div>;
-  if (loading) return <div className="p-8 text-primary animate-pulse font-bold pt-32 max-w-7xl mx-auto">Initializing Admin Dashboard...</div>;
+  if (!user) {
+    return (
+      <div className="p-8 pt-32 max-w-7xl mx-auto text-on-surface">
+        Please login to access the admin panel.
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="p-8 text-primary animate-pulse font-bold pt-32 max-w-7xl mx-auto">
+        Initializing Admin Dashboard...
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 bg-surface min-h-screen pt-32">
@@ -305,9 +346,20 @@ export default function AdminPanel() {
             <h2 className="text-xl font-bold text-primary flex items-center gap-2">
               <span>📩</span> Teacher Inquiries
             </h2>
-            <span className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest bg-surface-container-highest px-3 py-1 rounded-full">
-              Sorted by Priority
-            </span>
+            <div className="flex gap-2 p-1 bg-surface-container-highest rounded-xl">
+              <button 
+                onClick={() => setViewMode('active')}
+                className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition ${viewMode === 'active' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container'}`}
+              >
+                Active
+              </button>
+              <button 
+                onClick={() => setViewMode('archived')}
+                className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition ${viewMode === 'archived' ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:bg-surface-container'}`}
+              >
+                Archived
+              </button>
+            </div>
           </div>
           
           <div className="space-y-6">
@@ -332,8 +384,8 @@ export default function AdminPanel() {
                           Rank {inq.zen3_rank}
                         </span>
                       )}
+                      <span className="text-[10px] text-on-surface-variant/60">{inq.timestamp?.toDate().toLocaleString() || 'Just now'}</span>
                     </div>
-                    <span className="text-[10px] text-on-surface-variant/60">{inq.timestamp?.toDate().toLocaleString() || 'Just now'}</span>
                   </div>
                   <div className="bg-surface-container-highest p-4 rounded-xl text-sm text-on-surface mb-4">
                     <p className="font-bold text-[10px] uppercase text-on-surface-variant/40 mb-1">Inquiry</p>
@@ -404,6 +456,21 @@ export default function AdminPanel() {
                       className="bg-primary text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-primary/90 transition shadow-sm"
                     >
                       Send Reply
+                    </button>
+                  </div>
+                  
+                  <div className="flex gap-2 mt-4 pt-4 border-t border-outline-variant/5">
+                    <button 
+                      onClick={() => handleArchiveInquiry(inq.id, inq.archived || false)}
+                      className="text-[10px] font-bold text-primary hover:underline uppercase tracking-tighter"
+                    >
+                      {inq.archived ? 'Unarchive' : 'Archive'}
+                    </button>
+                    <button 
+                      onClick={() => handleDeleteInquiry(inq.id)}
+                      className="text-[10px] font-bold text-error hover:underline uppercase tracking-tighter"
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>

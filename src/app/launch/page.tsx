@@ -28,15 +28,18 @@ export default function LaunchPage() {
               <p className="text-lg lg:text-xl text-on-surface/80 mb-10 max-w-2xl font-body">
                 A Filipino Teacher’s Practical Guide to navigating DepEd Order 003 s. 2026. Empower your pedagogy with assistive intelligence without losing the human touch.
               </p>
+              <p className="text-lg lg:text-xl text-on-surface/80 mb-10 max-w-2xl font-body">
+                DepEd Order 003 s. 2026 is now in effect — but knowing the policy and knowing what to do Monday morning are two different things. This guide bridges that gap. Written by a Filipino educator and technology specialist, AI in the Classroom, Done Right gives you 30 ready-to-use prompts, step-by-step workflows, and plain-language guidance on what AI can and can't do in your classroom — all within the boundaries DepEd has set.
+              </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/checkout" className="bg-primary text-white px-8 py-4 rounded-md font-bold tracking-wide uppercase text-sm shadow-lg hover:shadow-primary/20 transition-all flex items-center gap-2">
-                  Order Now
+                  Get the Ebook
                 </Link>
               </div>
             </div>
             <div className="lg:col-span-5 relative">
               <div className="aspect-[3/4] rounded-xl overflow-hidden shadow-2xl relative z-10 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-500">
-                <Image src="/ebook-cover-v2.jpg" alt="AI in the Classroom, Done Right Ebook Cover" fill className="object-cover" />
+                <Image src="/ebook-cover-v2.jpg" alt="AI in the Classroom, Done Right Ebook Cover" fill className="object-cover" priority />
               </div>
             </div>
           </div>

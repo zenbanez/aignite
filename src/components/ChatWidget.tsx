@@ -16,7 +16,11 @@ const ChatWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-[100] font-sans flex flex-col items-end pointer-events-none">
       {/* Floating Window */}
-      <div className={`mb-4 w-[350px] md:w-[450px] transition-all duration-300 transform pointer-events-auto ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}`}>
+      <div className={`mb-4 w-[350px] md:w-[450px] transition-all duration-300 transform ${
+        isOpen 
+          ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' 
+          : 'opacity-0 scale-95 translate-y-10 pointer-events-none invisible'
+      }`}>
         <div className="relative">
           {/* Close Button Overlaid on Form */}
           <button 
@@ -28,7 +32,9 @@ const ChatWidget: React.FC = () => {
           
           {/* The Inquiry Form as the Content */}
           <div className="overflow-hidden rounded-3xl shadow-2xl">
-              <InquiryForm />
+              <InquiryForm onResponse={() => {
+                if (!isOpen) setHasNotification(true);
+              }} />
           </div>
         </div>
       </div>

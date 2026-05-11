@@ -33,7 +33,7 @@ export default function Home() {
           </div>
           <div className="lg:col-span-5 relative">
             <div className="aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl relative z-10 transform lg:rotate-3">
-              <Image src="/ebook-cover-v2.jpg" alt="AI in the Classroom, Done Right Ebook Cover" fill className="object-cover" />
+              <Image src="/ebook-cover-v2.jpg" alt="AI in the Classroom, Done Right Ebook Cover" fill className="object-cover" priority />
             </div>
             <div className="absolute -bottom-6 -left-6 w-64 h-64 bg-secondary-container/30 rounded-full blur-3xl -z-10"></div>
           </div>

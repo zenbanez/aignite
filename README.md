@@ -1,21 +1,31 @@
-# Project AIgnite: Educators Hub
+# Project AIgnite: Educators Hub (v1.5.0)
 
-This is the central technical platform for **Project AIgnite**, designed to provide AI literacy resources, prompt banks, and support for Filipino educators.
+This is the central technical platform for **Project AIgnite**, a "Digital Atelier" designed to empower Filipino educators with AI-driven pedagogical tools and literacy resources.
 
-## Current State (v1.2 - 2026-04-30)
+## Current State (v1.5.0 - 2026-05-11)
 
-The project is now a functional **Digital Atelier** and **Administrative Hub**:
+The platform is now production-ready, featuring a high-end editorial layout and a robust event-driven architecture:
 
-*   **Authentication & Roles:** Firebase Auth is live with **Custom Claims** for Admin roles.
-*   **Educators Hub:** Located at `projects/project_aignite/educator-hub`.
-*   **Curated Intelligence:** News briefings migrated from static JSON to the `aignite` Firestore database instance.
-*   **Admin Dashboard:** Secure `/admin` route live for Zen, featuring:
-    *   **Inquiry Inbox:** Real-time stream of teacher inquiries with Firestore-backed persistence.
-    *   **News Management:** CRUD operations for the news stream.
-    *   **User Management:** Real-time searchable list of all registered teachers.
-*   **Backend Infrastructure:** Firebase Admin SDK integrated with secure `service-account.json` (git-ignored) for elevated operations.
-*   **Prompt Lab:** A scholarly tool for educators to transform lesson objectives into ethical, DepEd-compliant prompts (Assistive, Administrative, Creative).
-*   **Mastery System:** Persistent level and rank system for users.
+### 📡 Pulse Messaging System
+*   **Background Heartbeat:** The chat widget maintains active Firestore listeners even when minimized, providing a seamless multi-tasking experience for teachers.
+*   **Real-time Notifications:** Pulse-driven visual alerts for new AI/Admin responses.
+*   **Batch-Processed Dead-Drop:** Secure airlock for teacher inquiries with automated priority ranking.
+
+### 🛡️ Secure Admin Dashboard
+*   **Unified Inbox:** Threaded conversation history with AI-suggested drafts.
+*   **Inbox Management:** Complete Archive and Delete functionality for optimal workspace organization.
+*   **Dynamic Briefings:** Manage the scholarly news stream and auto-generate RSS feeds.
+*   **Resource Hub:** Full CRUD for educational assets with Firebase Storage integration for protected downloads.
+
+### 🚀 SEO & Discovery
+*   **Institutional Presence:** Comprehensive Metadata, OpenGraph cards, and Twitter summary tags for social virality.
+*   **Crawler Compliance:** Dynamic `sitemap.xml` and `robots.ts` with AI-bot opt-outs.
+*   **Rich Snippets:** JSON-LD structured data for WebSite and Product discovery.
+
+### 🎨 Design System: "The Scholarly Mentor"
+*   **Aesthetics:** Vibrant teals, golden amber accents, and tonal layering (No-Line Rule).
+*   **Typography:** A dialogue between `Noto Serif` (Authority) and `Manrope` (Approachable Body).
+*   **Performance:** LCP-optimized hero sections with priority asset loading.
 
 ## Getting Started
 
@@ -23,27 +33,13 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+The project is configured for deployment on **Google App Hosting / Firebase**. Ensure all `NEXT_PUBLIC_` environment variables are configured in your CI/CD pipeline to be available during the build phase.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Built with ❤️ for Filipino Educators by Project AIgnite.*
