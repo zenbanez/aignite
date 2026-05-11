@@ -14,9 +14,9 @@ const ChatWidget: React.FC = () => {
   const [hasNotification, setHasNotification] = useState(true);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] font-sans flex flex-col items-end">
+    <div className="fixed bottom-6 right-6 z-[100] font-sans flex flex-col items-end pointer-events-none">
       {/* Floating Window */}
-      <div className={`mb-4 w-[350px] md:w-[450px] transition-all duration-300 transform ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}`}>
+      <div className={`mb-4 w-[350px] md:w-[450px] transition-all duration-300 transform pointer-events-auto ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-10 pointer-events-none'}`}>
         <div className="relative">
           {/* Close Button Overlaid on Form */}
           <button 
@@ -34,7 +34,7 @@ const ChatWidget: React.FC = () => {
       </div>
 
       {/* Toggle Button & Label */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pointer-events-auto">
         {/* Branding Label */}
         {!isOpen && (
           <div className="bg-white border border-outline-variant/10 px-4 py-2 rounded-2xl shadow-xl animate-in fade-in slide-in-from-right-4 duration-500">

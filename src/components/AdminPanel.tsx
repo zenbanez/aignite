@@ -36,6 +36,7 @@ interface NewsItem {
   category: string;
   date: string;
   excerpt: string;
+  url?: string;
 }
 
 interface Resource {
@@ -69,6 +70,7 @@ export default function AdminPanel() {
   const [newTitle, setNewTitle] = useState('');
   const [newCategory, setNewCategory] = useState('Policy');
   const [newExcerpt, setNewExcerpt] = useState('');
+  const [newUrl, setNewUrl] = useState('');
   
   // Resource Form State
   const [resTitle, setResTitle] = useState('');
@@ -217,11 +219,13 @@ export default function AdminPanel() {
         title: newTitle,
         category: newCategory,
         excerpt: newExcerpt,
+        url: newUrl,
         date: new Date().toISOString().split('T')[0]
       });
-      setNews([{ ...{ title: newTitle, category: newCategory, excerpt: newExcerpt, date: new Date().toISOString().split('T')[0] }, id: docRef.id }, ...news]);
+      setNews([{ ...{ title: newTitle, category: newCategory, excerpt: newExcerpt, url: newUrl, date: new Date().toISOString().split('T')[0] }, id: docRef.id }, ...news]);
       setNewTitle('');
       setNewExcerpt('');
+      setNewUrl('');
     } catch (err) {
       console.error("Error adding news:", err);
       alert("Failed to add news.");
@@ -448,6 +452,12 @@ export default function AdminPanel() {
                 className="w-full p-3 bg-surface-container-highest border-none rounded-xl h-32 text-on-surface" 
                 required 
               />
+              <input 
+                value={newUrl} 
+                onChange={e => setNewUrl(e.target.value)} 
+                placeholder="Source URL (Optional)" 
+                className="w-full p-3 bg-surface-container-highest border-none rounded-xl text-on-surface" 
+              />
               <button type="submit" className="w-full py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-colors">
                 Publish to Hub
               </button>
@@ -459,9 +469,10 @@ export default function AdminPanel() {
             <div className="space-y-3">
               {news.map(item => (
                 <div key={item.id} className="p-4 border border-outline-variant/10 rounded-xl flex justify-between items-center bg-surface-container-highest text-on-surface">
-                  <div className="flex flex-col">
-                    <span className="font-bold text-sm text-primary">{item.title}</span>
+                  <div className="flex flex-col overflow-hidden">
+                    <span className="font-bold text-sm text-primary truncate">{item.title}</span>
                     <span className="text-[10px] text-on-surface-variant uppercase tracking-tighter">{item.category} • {item.date}</span>
+                    {item.url && <span className="text-[9px] text-secondary truncate">{item.url}</span>}
                   </div>
                   <button 
                     onClick={() => handleDeleteNews(item.id)}

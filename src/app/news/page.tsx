@@ -11,6 +11,7 @@ interface NewsItem {
   category: string;
   date: string;
   excerpt: string;
+  url?: string;
 }
 
 export default function NewsPage() {
@@ -52,7 +53,12 @@ export default function NewsPage() {
                 <div className="text-xs text-secondary font-bold uppercase tracking-widest mb-4">{item.category} • {item.date}</div>
                 <h2 className="text-2xl font-bold text-primary mb-4 leading-tight">{item.title}</h2>
                 <p className="text-on-surface-variant mb-8 flex-grow">{item.excerpt}</p>
-                <Link href="/" className="text-primary font-bold text-sm hover:underline">← Back Home</Link>
+                <div className="flex justify-between items-center">
+                  <Link href="/" className="text-primary font-bold text-sm hover:underline">← Back Home</Link>
+                  {item.url && (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-secondary font-bold text-sm hover:underline">Read More →</a>
+                  )}
+                </div>
               </div>
             ))
           )}
