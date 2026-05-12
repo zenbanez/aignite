@@ -43,6 +43,8 @@ export const metadata: Metadata = {
     title: "Project AIgnite | The Digital Atelier",
     description: "Empowering Filipino educators with AI-driven pedagogical tools and intelligence.",
     images: ["/ebook-cover-wide-v2.jpg"],
+    site: "@ProjectAIgnite",
+    creator: "@ProjectAIgnite",
   },
   icons: {
     icon: [
@@ -70,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" prefix="og: https://ogp.me/ns#">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

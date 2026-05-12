@@ -1,5 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "AI in the Classroom, Done Right | Project AIgnite",
+  description: "A Filipino Teacher’s Practical Guide to navigating DepEd Order 003 s. 2026. Empower your pedagogy with assistive intelligence.",
+  openGraph: {
+    title: "AI in the Classroom, Done Right | Project AIgnite",
+    description: "Navigate DepEd Order 003 s. 2026 with confidence. Get the guide for Filipino educators.",
+    images: ["/ebook-cover-wide-v2.jpg"],
+  }
+};
 
 export default function LaunchPage() {
   return (
