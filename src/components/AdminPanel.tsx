@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { collection, getDocs, doc, deleteDoc, addDoc, query, orderBy, serverTimestamp, updateDoc, limit, startAfter } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
@@ -52,7 +53,7 @@ interface Resource {
 }
 
 export default function AdminPanel() {
-  const { user } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   
   // Dashboard State
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -312,18 +313,23 @@ export default function AdminPanel() {
     return email.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  if (!user) {
+
+  if (authLoading || (user && loading)) {
     return (
-      <div className="p-8 pt-32 max-w-7xl mx-auto text-on-surface">
-        Please login to access the admin panel.
+      <div className="p-8 text-primary animate-pulse font-bold pt-32 max-w-7xl mx-auto">
+        Initializing Admin Dashboard...
       </div>
     );
   }
 
-  if (loading) {
+  if (!user || !isAdmin) {
     return (
-      <div className="p-8 text-primary animate-pulse font-bold pt-32 max-w-7xl mx-auto">
-        Initializing Admin Dashboard...
+      <div className="p-8 pt-32 max-w-7xl mx-auto text-on-surface font-sans text-center">
+        <h2 className="text-2xl font-bold text-primary mb-4">Access Denied</h2>
+        <p className="text-on-surface-variant mb-8">You do not have administrative privileges to access this area.</p>
+        <Link href="/" className="bg-primary text-white px-6 py-3 rounded-xl shadow-sm hover:shadow-lg transition-all">
+          Return to Home
+        </Link>
       </div>
     );
   }

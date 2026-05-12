@@ -6,6 +6,7 @@ import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
   user: User | null;
+  isAdmin: boolean;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   logOut: () => Promise<void>;
@@ -13,6 +14,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  isAdmin: false,
   loading: true,
   signInWithGoogle: async () => {},
   logOut: async () => {},
@@ -20,11 +22,19 @@ const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
+      if (user) {
+        // Check for admin claim
+        const token = await user.getIdTokenResult();
+        setIsAdmin(!!token.claims.admin);
+      } else {
+        setIsAdmin(false);
+      }
       setLoading(false);
     });
     return () => unsubscribe();
@@ -48,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logOut }}>
+    <AuthContext.Provider value={{ user, isAdmin, loading, signInWithGoogle, logOut }}>
       {children}
     </AuthContext.Provider>
   );

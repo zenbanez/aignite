@@ -5,9 +5,8 @@ import Link from "next/link";
 import { useAuth } from '@/context/AuthContext';
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user, isAdmin, logOut } = useAuth();
   const [isOpen, setIsOpen] = React.useState(false);
-  const isAdmin = user?.email === "zenbanez@gmail.com"; 
 
   const navLinks = [
     { name: 'Atelier', href: '/atelier' },
@@ -29,17 +28,17 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          
+
           {isAdmin && (
             <Link href="/admin" className="hover:text-primary transition-colors text-red-600 text-xs">Admin</Link>
           )}
-          
+
           {user ? (
             <div className="flex items-center gap-6">
               <span className="text-[10px] text-on-surface-variant bg-surface-container px-3 py-1 rounded-full border border-outline-variant/10">
                 {user.email?.split('@')[0]}
               </span>
-              <button 
+              <button
                 onClick={logOut}
                 className="hover:text-primary transition-colors text-xs opacity-60"
               >
@@ -49,14 +48,14 @@ const Navbar = () => {
           ) : (
             <Link href="/login" className="hover:text-primary transition-colors text-xs">Login</Link>
           )}
-          
+
           <Link href="/launch" className="bg-primary text-white px-6 py-3 rounded-xl shadow-sm hover:shadow-xl hover:translate-y-[-1px] transition-all text-[11px]">
             Get the Ebook
           </Link>
         </div>
 
         {/* Mobile Toggle */}
-        <button 
+        <button
           className="md:hidden text-primary p-2"
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -71,19 +70,19 @@ const Navbar = () => {
         <div className="md:hidden bg-surface-container-low border-b border-outline-variant/10 animate-in slide-in-from-top duration-300">
           <div className="flex flex-col p-6 gap-6 font-label text-sm tracking-widest uppercase font-bold text-on-surface">
             {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
-                href={link.href} 
+              <Link
+                key={link.href}
+                href={link.href}
                 onClick={() => setIsOpen(false)}
                 className="hover:text-secondary transition-colors"
               >
                 {link.name}
               </Link>
             ))}
-            
+
             {isAdmin && (
-              <Link 
-                href="/admin" 
+              <Link
+                href="/admin"
                 onClick={() => setIsOpen(false)}
                 className="hover:text-primary transition-colors text-red-600"
               >
@@ -98,7 +97,7 @@ const Navbar = () => {
                     <span className="text-[10px] text-on-surface-variant bg-surface-container px-3 py-1 rounded-full border border-outline-variant/10">
                       {user.email}
                     </span>
-                    <button 
+                    <button
                       onClick={() => { logOut(); setIsOpen(false); }}
                       className="text-primary text-xs font-bold"
                     >
@@ -107,17 +106,17 @@ const Navbar = () => {
                   </div>
                 </>
               ) : (
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   onClick={() => setIsOpen(false)}
                   className="hover:text-primary transition-colors"
                 >
                   Login
                 </Link>
               )}
-              
-              <Link 
-                href="/launch" 
+
+              <Link
+                href="/checkout"
                 onClick={() => setIsOpen(false)}
                 className="bg-primary text-white px-6 py-4 rounded-xl text-center shadow-lg active:scale-95 transition-all"
               >

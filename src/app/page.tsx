@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 // Pre-load components to prevent hydration mismatch while still keeping them client-side only
-const CuratedNews = dynamic(() => import("@/components/CuratedNews"), { 
+const CuratedNews = dynamic(() => import("@/components/CuratedNews"), {
   ssr: false,
   loading: () => <div className="h-96 animate-pulse bg-surface-container-low rounded-2xl"></div>
 });
@@ -16,11 +16,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 z-10">
             <h1 className="text-5xl lg:text-7xl font-black text-primary leading-tight mb-6">
-              Master AI in<br/>
+              Master AI in<br />
               <span className="text-secondary italic font-light">the Classroom.</span>
             </h1>
             <p className="text-lg lg:text-xl text-on-surface-variant mb-10 max-w-2xl font-sans">
               The definitive Filipino teacher's guide to navigating DepEd Order 003 s. 2026. Empower your pedagogy with assistive intelligence without losing the human touch.
+            </p>
+            <p className="text-lg lg:text-xl text-on-surface-variant mb-10 max-w-2xl font-sans">
+              This guide aims to be a practical, no-jargon guide for Filipino teachers on using AI tools the right way — fully aligned with DepEd Order 003 s. 2026. Save time, stay compliant, and bring something genuinely useful into your classroom.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/launch" className="bg-gradient-to-r from-primary to-primary-container text-white px-8 py-4 rounded-xl font-bold tracking-wide uppercase text-sm shadow-lg hover:shadow-primary/20 transition-all inline-flex items-center justify-center">
